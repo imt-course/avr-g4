@@ -40,6 +40,7 @@ int main (void) {
 	printf("y = %p\n", &y);
 	*/
 	
+	/*
 	int x = 0x01234567;
 	char *ptr = (char*)&x;
 	if (*ptr == 0x01) {
@@ -47,7 +48,27 @@ int main (void) {
 	}
 	else if (*ptr = 0x67) {
 		printf("Little Endian");
-	}
+	}*/
+	
+	
+	int arr[10] = {0,5,7,9,15,20,6,7,8,9};
+	int *ptr;
+	ptr = arr; //Assume 1st element at 1000
+	printf("%d \n", *(++ptr)); // 
+	printf("%d \n", *ptr); // 
+	printf("%p \n", arr); // 
+	printf("%d \n", *arr + 2); // 
+	printf("%d \n", *(arr + 2)); // 
+	printf("%d \n", arr[0]); // 
+	printf("%d \n", &arr[0]); // 
+	printf("%d \n", 0[arr]); //  
+	printf("%d \n", arr++); // 
+	printf("%p \n", ptr); // 
+	printf("%d \n", *ptr); // 
+	printf("%d \n", ptr[0]); // 
+	printf("%d \n", &ptr[0]); // 
+	printf("%d \n", 0[ptr]); // 
+
 	
 }
 
