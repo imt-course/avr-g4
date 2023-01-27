@@ -1,1 +1,9 @@
 *.exe
+*.lock
+RemoteSystemsTempFiles
+.metadata
+.project
+.settings
+Release
+.cproject
+.gitignore
