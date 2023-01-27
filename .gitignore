@@ -7,3 +7,4 @@ RemoteSystemsTempFiles
 Release
 .cproject
 .gitignore
+/Packages/.repos.xml
