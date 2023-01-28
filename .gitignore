@@ -8,3 +8,4 @@ Release
 .cproject
 .gitignore
 /Packages/.repos.xml
+/ECLIPSE_PROJECTS/AVR_DRIVERS/.vscode/*.json
