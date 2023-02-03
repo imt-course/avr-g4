@@ -11,10 +11,23 @@
 #include "Macros.h"
 #include "Dio.h"
 #include "Led.h"
+#include "Button.h"
+#include "Ssd.h"
+#include "Lcd.h"
 #include "Delay.h"
 
 
 int main (void) {
+
+	Lcd_Init();
+	Lcd_SendData('A');
+	Lcd_SendData('h');
+	Lcd_SendData('m');
+	Lcd_SendData('e');
+	Lcd_SendData('d');
+
+
+/************************** DIO **************************/
 #if 0
 	/* Toggle LED every 500 ms */
 	/* Set pin direction to output */
@@ -55,26 +68,36 @@ int main (void) {
 	}
 #endif
 
-#if 1
-
-#define SWITCH_PIN DIO_PORTA,DIO_PIN1
-
+#if 0
 	Led_Init(LED1_PIN);
-	Dio_SetPinMode(SWITCH_PIN, DIO_MODE_INPUT_PULLUP);
+	Button_Init(BUTTON_PIN);
 
 	while (1)
 	{
-		if (Dio_ReadPinLevel(SWITCH_PIN) == DIO_LEVEL_LOW) {
+		if (Button_GetStatus(BUTTON_PIN) == BUTTON_PRESSED) {
 			Led_TurnOn(LED1_PIN);
 		}
 		else {
 			Led_TurnOff(LED1_PIN);
 		}
 	}
-	
-
-
 #endif
 
+#if 0
+	u8 i;
+	Ssd_Init();
+	while (1)
+	{
+		for (i=0; i<9; i++) {
+			Ssd_DisplayNumber(i);
+			_delay_ms(1000);
+		}
+		for (i=9; i>0; i--) {
+			Ssd_DisplayNumber(i);
+			_delay_ms(1000);
+		}
+	}
+
+#endif
 
 }

@@ -10,8 +10,11 @@
 
 #include "Dio.h"
 
-#define LED1_PIN DIO_PORTA,DIO_PIN0
-#define LED2_PIN DIO_PORTB,DIO_PIN5
+/************************* USER CONFIGURATIONS *************************/
+#define LED_ON_VOLTAGE  DIO_LEVEL_HIGH
 
+#define LED1_PIN        DIO_PORTA,DIO_PIN0
+#define LED2_PIN        DIO_PORTB,DIO_PIN5
+/********************** END OF USER CONFIGURATIONS **********************/
 
 #endif /* INC_LED_CFG_H_ */
