@@ -55,6 +55,27 @@ void Lcd_DisplayString(const char* str) {
     }    
 }
 
+void Lcd_DisplayNumber(s32 number) {
+    u32 reversed = 0;
+    if (number == 0) {
+        Lcd_SendData('0');
+    }
+    else if (number < 0) {
+        Lcd_SendData('-');
+        number *= -1;
+    }
+    while (number != 0) 
+    {
+        reversed = (reversed*10) + (number%10);
+        number /= 10;
+    }
+    while (reversed != 0)
+    {
+        Lcd_SendData(reversed%10 + '0');
+        reversed /= 10;
+    }    
+}
+
 
 static void Lcd_SendCommand(u8 command) {
     Dio_SetPinLevel(LCD_PIN_RS, DIO_LEVEL_LOW);

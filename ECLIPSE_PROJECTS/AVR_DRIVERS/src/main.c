@@ -14,18 +14,33 @@
 #include "Button.h"
 #include "Ssd.h"
 #include "Lcd.h"
+#include "Keypad.h"
 #include "Delay.h"
 
 
 int main (void) {
+	Keypad_ButtonType i;
+	Keypad_Init();
+	while (1)
+	{
+		for (i=KEYPAD_BUTTON_00; i<=KEYPAD_BUTTON_15; i++) {
+			if (Keypad_GetButtonState(i) == KEYPAD_PRESSED) {
+				Lcd_DisplayNumber(i);
+			}
+		}
+	}
 
+
+#if 0
 	Lcd_Init();
+	Lcd_DisplayString("My name is Hassan");
 	Lcd_DisplayCharcter('A');
 	Lcd_DisplayCharcter('h');
 	Lcd_DisplayCharcter('m');
 	Lcd_DisplayCharcter('e');
 	Lcd_DisplayCharcter('d');
-
+	Lcd_DisplayNumber(2147483645);
+#endif
 
 /************************** DIO **************************/
 #if 0
