@@ -21,6 +21,8 @@
 int main (void) {
 	Keypad_ButtonType i;
 	Keypad_Init();
+	Lcd_Init();
+	Lcd_DisplayCharcter('*');
 	while (1)
 	{
 		for (i=KEYPAD_BUTTON_00; i<=KEYPAD_BUTTON_15; i++) {
