@@ -20,11 +20,11 @@
 int main (void) {
 
 	Lcd_Init();
-	Lcd_SendData('A');
-	Lcd_SendData('h');
-	Lcd_SendData('m');
-	Lcd_SendData('e');
-	Lcd_SendData('d');
+	Lcd_DisplayCharcter('A');
+	Lcd_DisplayCharcter('h');
+	Lcd_DisplayCharcter('m');
+	Lcd_DisplayCharcter('e');
+	Lcd_DisplayCharcter('d');
 
 
 /************************** DIO **************************/

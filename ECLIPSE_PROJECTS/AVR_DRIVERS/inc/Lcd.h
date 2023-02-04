@@ -11,8 +11,7 @@
 #include "Types.h"
 
 void Lcd_Init(void);
-void Lcd_SendCommand(u8 command);
-void Lcd_SendData(u8 data);
-
+void Lcd_DisplayCharcter(char data);
+void Lcd_DisplayString(const char* str);
 
 #endif /* INC_LCD_H_ */
