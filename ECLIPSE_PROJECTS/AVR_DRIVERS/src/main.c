@@ -28,7 +28,7 @@ int main (void) {
 		0b00100,
 		0b00100,
 		0b00000
-	}
+	};
 	Lcd_Init();
 	Lcd_SaveSpecialCharacter(0, pattern);
 	Lcd_SetCursorPosition(1,0);
