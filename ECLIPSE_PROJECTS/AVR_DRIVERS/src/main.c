@@ -19,6 +19,23 @@
 
 
 int main (void) {
+	u8 pattern[] = {
+		0b00110,
+		0b01100,
+		0b00000,
+		0b00100,
+		0b00100,
+		0b00100,
+		0b00100,
+		0b00000
+	}
+	Lcd_Init();
+	Lcd_SaveSpecialCharacter(0, pattern);
+	Lcd_SetCursorPosition(1,0);
+	Lcd_DisplayCharcter(0);
+
+
+#if 0
 	Keypad_ButtonType i;
 	Keypad_Init();
 	Lcd_Init();
@@ -32,7 +49,7 @@ int main (void) {
 		}
 	}
 
-
+#endif
 #if 0
 	Lcd_Init();
 	Lcd_DisplayString("My name is Hassan");

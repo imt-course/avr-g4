@@ -77,6 +77,59 @@ void Lcd_DisplayNumber(s32 number) {
 }
 
 
+void Lcd_SetCursorPosition(u8 row, u8 column) {
+    u8 address = row*0x40 + column;
+    SET_BIT(address, 7);
+    Lcd_SendCommand(address);
+}
+
+void Lcd_ClearDisplay(void) {
+    Lcd_SendCommand(0b00000001);
+}
+
+void Lcd_ShiftDisplayLeft(u8 count) {
+    while (count > 0) {
+        Lcd_SendCommand(0b00011000);
+        count--;
+    }
+}
+
+void Lcd_ShiftDisplayRight(u8 count) {
+    while (count > 0) {
+        Lcd_SendCommand(0b00011100);
+        count--;
+    }
+}
+
+void Lcd_ShiftCursorLeft(u8 count) {
+    while (count > 0) {
+        Lcd_SendCommand(0b00010000);
+        count--;
+    }
+}
+
+void Lcd_ShiftCursorRight(u8 count) {
+    while (count > 0) {
+        Lcd_SendCommand(0b00010100);
+        count--;
+    }
+}
+
+void Lcd_ReturnHome(void) {
+    Lcd_SendCommand(0b00000010);
+}
+
+void Lcd_SaveSpecialCharacter(u8 location, u8* pattern) {
+    u8 i;
+    location *= 8;
+    if (location < 64) {
+        SET_BIT(location, 6);
+        Lcd_SendCommand(location);
+        for (i=0; i<8; i++) {
+            Lcd_SendData(pattern[i]);
+        }
+    }
+}
 static void Lcd_SendCommand(u8 command) {
     Dio_SetPinLevel(LCD_PIN_RS, DIO_LEVEL_LOW);
     Dio_SetPinLevel(LCD_PIN_RW, DIO_LEVEL_LOW);
