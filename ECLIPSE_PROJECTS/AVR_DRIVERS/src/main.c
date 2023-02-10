@@ -19,6 +19,7 @@
 
 
 int main (void) {
+#if 1
 	u8 pattern[] = {
 		0b00110,
 		0b01100,
@@ -29,13 +30,14 @@ int main (void) {
 		0b00100,
 		0b00000
 	};
-	Lcd_Init();
+	Lcd_Init(&Lcd_Configuration);
 	Lcd_SaveSpecialCharacter(0, pattern);
 	Lcd_SetCursorPosition(1,0);
 	Lcd_DisplayCharcter(0);
-
+#endif
 
 #if 0
+	u8 flag[16] = {0};
 	Keypad_ButtonType i;
 	Keypad_Init();
 	Lcd_Init();
@@ -44,7 +46,13 @@ int main (void) {
 	{
 		for (i=KEYPAD_BUTTON_00; i<=KEYPAD_BUTTON_15; i++) {
 			if (Keypad_GetButtonState(i) == KEYPAD_PRESSED) {
-				Lcd_DisplayNumber(i);
+				if (flag[i] == 0) {
+					flag[i] = 1;
+					Lcd_DisplayNumber(i);
+				}
+			}
+			else {
+				flag[i] = 0;
 			}
 		}
 	}
