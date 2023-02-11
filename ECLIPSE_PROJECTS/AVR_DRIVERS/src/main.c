@@ -20,8 +20,7 @@
 #include "Delay.h"
 
 void __vector_1 (void) __attribute__((signal));
-
-void __vector_1 (void) __attribute__((signal)) {
+void __vector_1 (void) {
 	Led_Flip(LED1_PIN);
 }
 
