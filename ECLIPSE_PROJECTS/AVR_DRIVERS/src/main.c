@@ -15,11 +15,30 @@
 #include "Ssd.h"
 #include "Lcd.h"
 #include "Keypad.h"
+#include "Gie.h"
+#include "ExtInt.h"
 #include "Delay.h"
 
+void __vector_1 (void) __attribute__((signal));
+
+void __vector_1 (void) __attribute__((signal)) {
+	Led_Flip(LED1_PIN);
+}
 
 int main (void) {
-#if 1
+	Button_Init(EXTINT_PIN_INT0);
+	Led_Init(LED1_PIN);
+	ExtInt_SetTriggerEdge(EXTINT_INT_CHANNEL_INT0, EXTINT_TRIGGER_EDGW_FALLING);
+	ExtInt_EnableNotification(EXTINT_INT_CHANNEL_INT0);
+	Gie_Enable();
+	while (1)
+	{
+		
+	}
+	
+
+
+#if 0
 	u8 pattern[] = {
 		0b00110,
 		0b01100,
