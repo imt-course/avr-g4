@@ -28,7 +28,6 @@ void Lcd_Init(const Lcd_DisplayControlType* control) {
     Dio_SetPinMode(LCD_PIN_D7, DIO_MODE_OUTPUT);
     Dio_SetPinMode(LCD_PIN_EN, DIO_MODE_OUTPUT);
     Lcd_ControlDisplay(control);
-    Lcd_SendCommand(0b00001111);
     /* Display Clear*/
     Lcd_SendCommand(0b00000001);
 }
