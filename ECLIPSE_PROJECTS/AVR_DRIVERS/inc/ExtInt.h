@@ -30,6 +30,6 @@ typedef enum {
 void ExtInt_SetTriggerEdge(ExtInt_ChannelType channel, ExtInt_TriggerEdgeType edge);
 void ExtInt_EnableNotification(ExtInt_ChannelType channel);
 void ExtInt_DisableNotification(ExtInt_ChannelType channel);
-
+void ExtInt_SetCallback(ExtInt_ChannelType channel, void (*funcPtr) (void));
 
 #endif /* INC_EXTINT_H_ */

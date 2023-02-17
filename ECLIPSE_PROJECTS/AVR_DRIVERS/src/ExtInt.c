@@ -7,9 +7,51 @@
 #include "Types.h"
 #include "Registers.h"
 #include "Macros.h"
+#include "Interrupts.h"
 #include "ExtInt.h"
 
+void (*callback_INT0) (void) = NULL_PTR;
+void (*callback_INT1) (void) = NULL_PTR;
+void (*callback_INT2) (void) = NULL_PTR;
 
+ISR(VECTOR_INT0)
+{
+    if (NULL_PTR != callback_INT0) {
+        callback_INT0();
+    }
+}
+
+ISR(VECTOR_INT1)
+{
+    if (NULL_PTR != callback_INT1) {
+        callback_INT1();
+    }
+}
+
+ISR(VECTOR_INT2)
+{
+    if (NULL_PTR != callback_INT2) {
+        callback_INT2();
+    }
+}
+
+
+void ExtInt_SetCallback(ExtInt_ChannelType channel, void (*funcPtr) (void)) {
+    switch (channel)
+    {
+    case EXTINT_INT_CHANNEL_INT0:
+        callback_INT0 = funcPtr;
+        break;
+    case EXTINT_INT_CHANNEL_INT1:
+        callback_INT1 = funcPtr;
+        break;
+    case EXTINT_INT_CHANNEL_INT2:
+        callback_INT2 = funcPtr;
+        break;
+    default:
+        break;
+    }
+}
 
 void ExtInt_SetTriggerEdge(ExtInt_ChannelType channel, ExtInt_TriggerEdgeType edge) {
     switch (channel)

@@ -19,8 +19,7 @@
 #include "ExtInt.h"
 #include "Delay.h"
 
-void __vector_1 (void) __attribute__((signal));
-void __vector_1 (void) {
+void Handler_Int0 (void) {
 	Led_Flip(LED1_PIN);
 }
 
@@ -28,8 +27,10 @@ int main (void) {
 	Button_Init(EXTINT_PIN_INT0);
 	Led_Init(LED1_PIN);
 	ExtInt_SetTriggerEdge(EXTINT_INT_CHANNEL_INT0, EXTINT_TRIGGER_EDGW_FALLING);
+	ExtInt_SetCallback(EXTINT_INT_CHANNEL_INT0, Handler_Int0);
 	ExtInt_EnableNotification(EXTINT_INT_CHANNEL_INT0);
 	Gie_Enable();
+
 	while (1)
 	{
 		
