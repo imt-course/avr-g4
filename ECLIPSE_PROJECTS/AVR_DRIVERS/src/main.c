@@ -17,6 +17,7 @@
 #include "Keypad.h"
 #include "Gie.h"
 #include "ExtInt.h"
+#include "Adc.h"
 #include "Delay.h"
 
 void Handler_Int0 (void) {
@@ -24,6 +25,21 @@ void Handler_Int0 (void) {
 }
 
 int main (void) {
+	u16 result = 0;
+	Adc_Init();
+	Lcd_Init();
+	while (1)
+	{
+		Adc_StartConversion(ADC_CHANNEL_ADC0);
+		result = Adc_GetResult();
+		Lcd_ClearDisplay();
+		Lcd_DisplayString("Adc = ");
+		Lcd_DisplayNumber(result);
+		_delay_ms(500);
+	}
+	
+
+#if 0
 	Button_Init(EXTINT_PIN_INT0);
 	Led_Init(LED1_PIN);
 	ExtInt_SetTriggerEdge(EXTINT_INT_CHANNEL_INT0, EXTINT_TRIGGER_EDGW_FALLING);
@@ -35,7 +51,7 @@ int main (void) {
 	{
 		
 	}
-	
+#endif
 
 
 #if 0
