@@ -26,15 +26,21 @@ void Handler_Int0 (void) {
 
 int main (void) {
 	u16 result = 0;
+	u8 i;
 	Adc_Init();
-	Lcd_Init();
-	while (1)
+	Lcd_Init(&Lcd_Configuration);
+	while (1)	
 	{
-		Adc_StartConversion(ADC_CHANNEL_ADC0);
-		result = Adc_GetResult();
+		result = 0;
+		for (i=0; i<10; i++) {
+			Adc_StartConversion(ADC_CHANNEL_ADC0);
+			result += Adc_GetResult();
+			_delay_ms(10);
+		}
+		result /= 10;
 		Lcd_ClearDisplay();
 		Lcd_DisplayString("Adc = ");
-		Lcd_DisplayNumber(result);
+		Lcd_DisplayNumber(((u32)result*5000/1024));
 		_delay_ms(500);
 	}
 	

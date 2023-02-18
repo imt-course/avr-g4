@@ -51,5 +51,5 @@ u16 Adc_GetResult(void) {
     /* Clear Flag */
     SET_BIT(ADCSRA, 4);
     /* Return Result */
-    return (((ADCH<<8) | ADCL) & 0x3FF);
+    return (ADCDATA & 0x3FF);
 }
