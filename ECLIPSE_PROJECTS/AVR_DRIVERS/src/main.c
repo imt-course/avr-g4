@@ -18,13 +18,51 @@
 #include "Gie.h"
 #include "ExtInt.h"
 #include "Adc.h"
+#include "Interrupts.h"
+#include "Registers.h"
 #include "Delay.h"
 
 void Handler_Int0 (void) {
 	Led_Flip(LED1_PIN);
 }
 
+ISR(VECTOR_TIM0_COMP) {
+	static u16 counter = 0;
+	counter++;
+	if (counter == 4000) {
+		counter = 0;
+		Dio_FlipPinLevel(DIO_PORTA, DIO_PIN0);
+	}
+}
+
+
 int main (void) {
+	Dio_SetPinMode(DIO_PORTA, DIO_PIN0, DIO_MODE_OUTPUT);
+	/*  Waveform Generation Mode (CTC)*/
+	SET_BIT(TCCR0, 3);
+	CLR_BIT(TCCR0, 6);
+	/* Set Output Compare Register */
+	OCR0 = 250;
+	/* Compare Match Interrupt Enable (Peripheral Interrupt)*/
+	SET_BIT(TIMSK, 1);
+	/* Clock Select */
+	CLR_BIT(TCCR0, 0);
+	SET_BIT(TCCR0, 1);
+	CLR_BIT(TCCR0, 2);
+	/* Enable Global Interrupt */
+	Gie_Enable();
+
+	while (1)
+	{
+		
+	}
+	
+
+
+
+
+
+#if 0
 	u16 result = 0;
 	u8 i;
 	Adc_Init();
@@ -43,7 +81,7 @@ int main (void) {
 		Lcd_DisplayNumber(((u32)result*5000/1024));
 		_delay_ms(500);
 	}
-	
+#endif
 
 #if 0
 	Button_Init(EXTINT_PIN_INT0);
