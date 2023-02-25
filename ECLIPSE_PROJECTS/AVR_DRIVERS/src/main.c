@@ -18,18 +18,18 @@
 #include "Gie.h"
 #include "ExtInt.h"
 #include "Adc.h"
-#include "Interrupts.h"
 #include "Registers.h"
+#include "Gpt.h"
 #include "Delay.h"
 
 void Handler_Int0 (void) {
 	Led_Flip(LED1_PIN);
 }
 
-ISR(VECTOR_TIM0_COMP) {
-	static u16 counter = 0;
+void Handler_Tim0_Comp (void) {
+	static u8 counter = 0;
 	counter++;
-	if (counter == 4000) {
+	if (counter == 250) {
 		counter = 0;
 		Dio_FlipPinLevel(DIO_PORTA, DIO_PIN0);
 	}
@@ -38,17 +38,30 @@ ISR(VECTOR_TIM0_COMP) {
 
 int main (void) {
 	Dio_SetPinMode(DIO_PORTA, DIO_PIN0, DIO_MODE_OUTPUT);
+	Gpt_Init(GPT_CHANNEL_TIM0, &Gpt_Configuration);
+	Gpt_SetCompareReg(GPT_COMP_REG_TIM0, 125);
+	Gpt_SetCallback(GPT_INT_SOURCE_TIM0_COMP, Handler_Tim0_Comp);
+	Gpt_EnableNotification(GPT_INT_SOURCE_TIM0_COMP);
+	Gpt_Start(GPT_CHANNEL_TIM0, GPT_PRESCALER_256);
+	Gie_Enable();
+	while (1)
+	{
+		
+	}
+	
+#if 0
+	Dio_SetPinMode(DIO_PORTA, DIO_PIN0, DIO_MODE_OUTPUT);
 	/*  Waveform Generation Mode (CTC)*/
 	SET_BIT(TCCR0, 3);
 	CLR_BIT(TCCR0, 6);
 	/* Set Output Compare Register */
-	OCR0 = 250;
+	OCR0 = 125;
 	/* Compare Match Interrupt Enable (Peripheral Interrupt)*/
 	SET_BIT(TIMSK, 1);
 	/* Clock Select */
 	CLR_BIT(TCCR0, 0);
-	SET_BIT(TCCR0, 1);
-	CLR_BIT(TCCR0, 2);
+	CLR_BIT(TCCR0, 1);
+	SET_BIT(TCCR0, 2);
 	/* Enable Global Interrupt */
 	Gie_Enable();
 
@@ -57,9 +70,7 @@ int main (void) {
 		
 	}
 	
-
-
-
+#endif 
 
 
 #if 0
