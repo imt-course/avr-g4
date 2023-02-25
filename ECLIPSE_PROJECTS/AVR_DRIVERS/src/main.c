@@ -43,11 +43,11 @@ int main (void) {
 	while (1)
 	{
 		for (i=0; i<=100; i++) {
-			Pwm_SetDutyCycle(i);
+			Pwm_SetDutyCycle(PWM_CHANNEL_OC0, i);
 			_delay_ms(5);
 		}
 		for (i=100; i>0; i--) {
-			Pwm_SetDutyCycle(i);
+			Pwm_SetDutyCycle(PWM_CHANNEL_OC0, i);
 			_delay_ms(5);
 		}
 	}
