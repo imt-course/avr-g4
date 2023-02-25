@@ -20,6 +20,7 @@
 #include "Adc.h"
 #include "Registers.h"
 #include "Gpt.h"
+#include "Pwm.h"
 #include "Delay.h"
 
 void Handler_Int0 (void) {
@@ -35,8 +36,23 @@ void Handler_Tim0_Comp (void) {
 	}
 }
 
-
 int main (void) {
+	u8 i;
+	Pwm_Init(PWM_CHANNEL_OC0, PWM_MODE_FAST);
+	Pwm_Start(PWM_CHANNEL_OC0, PWM_PRESCALER_8);
+	while (1)
+	{
+		for (i=0; i<=100; i++) {
+			Pwm_SetDutyCycle(i);
+			_delay_ms(5);
+		}
+		for (i=100; i>0; i--) {
+			Pwm_SetDutyCycle(i);
+			_delay_ms(5);
+		}
+	}
+	
+#if 0
 	Dio_SetPinMode(DIO_PORTA, DIO_PIN0, DIO_MODE_OUTPUT);
 	Gpt_Init(GPT_CHANNEL_TIM0, &Gpt_Configuration);
 	Gpt_SetCompareReg(GPT_COMP_REG_TIM0, 125);
@@ -48,7 +64,8 @@ int main (void) {
 	{
 		
 	}
-	
+#endif
+
 #if 0
 	Dio_SetPinMode(DIO_PORTA, DIO_PIN0, DIO_MODE_OUTPUT);
 	/*  Waveform Generation Mode (CTC)*/
