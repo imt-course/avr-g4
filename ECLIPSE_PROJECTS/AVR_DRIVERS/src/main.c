@@ -38,6 +38,20 @@ void Handler_Tim0_Comp (void) {
 
 int main (void) {
 	u8 i;
+	Pwm_Init(PWM_CHANNEL_OC1A, PWM_MODE_FAST_ICR);
+	Pwm_SetICR(20000);
+	Pwm_Start(PWM_CHANNEL_OC1A, PWM_PRESCALER_8);
+	while (1)
+	{
+		for (i=1000; i<=2000; i+=50) {
+			Pwm_SetTimeOn(PWM_CHANNEL_OC1A, i);
+			_delay_ms(50);
+		}
+		_delay_ms(500);
+	}
+
+#if 0
+	u8 i;
 	Pwm_Init(PWM_CHANNEL_OC0, PWM_MODE_FAST);
 	Pwm_Start(PWM_CHANNEL_OC0, PWM_PRESCALER_8);
 	while (1)
@@ -51,7 +65,8 @@ int main (void) {
 			_delay_ms(5);
 		}
 	}
-	
+#endif
+
 #if 0
 	Dio_SetPinMode(DIO_PORTA, DIO_PIN0, DIO_MODE_OUTPUT);
 	Gpt_Init(GPT_CHANNEL_TIM0, &Gpt_Configuration);
