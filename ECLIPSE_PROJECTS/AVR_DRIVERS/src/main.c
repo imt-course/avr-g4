@@ -23,8 +23,31 @@
 #include "Pwm.h"
 #include "Delay.h"
 
+u16 T_total;
+u16 T_on;
+u8 overflow_counter = 0;
 void Handler_Int0 (void) {
-	Led_Flip(LED1_PIN);
+	static u8 state = 1;
+	switch (state)
+	{
+	case 1:
+		Gpt_SetCounterValue(GPT_CHANNEL_TIM0, 0);
+		overflow_counter = 0;
+		ExtInt_SetTriggerEdge(EXTINT_INT_CHANNEL_INT0, EXTINT_TRIGGER_EDGW_FALLING);
+		state = 2;
+		break;
+	case 2:
+		T_on = overflow_counter*0xFF + Gpt_GetCounterValue(GPT_CHANNEL_TIM0);
+		ExtInt_SetTriggerEdge(EXTINT_INT_CHANNEL_INT0, EXTINT_TRIGGER_EDGW_RISING);
+		state = 3;
+		break;
+	case 3:
+		T_total = overflow_counter*0xFF + Gpt_GetCounterValue(GPT_CHANNEL_TIM0);
+		state = 1;
+		break;
+	default:
+		break;
+	}
 }
 
 void Handler_Tim0_Comp (void) {
@@ -36,19 +59,57 @@ void Handler_Tim0_Comp (void) {
 	}
 }
 
+void Handler_Tim0_OVF (void) {
+	overflow_counter++;
+}
+
 int main (void) {
-	u8 i;
+	u16 i = 0;
+	Lcd_Init(&Lcd_Configuration);
+	Dio_SetPinMode(EXTINT_PIN_INT0, DIO_MODE_INPUT_FLOATING);
+	ExtInt_SetTriggerEdge(EXTINT_INT_CHANNEL_INT0, EXTINT_TRIGGER_EDGW_RISING);
+	ExtInt_SetCallback(EXTINT_INT_CHANNEL_INT0, Handler_Int0);
+	ExtInt_EnableNotification(EXTINT_INT_CHANNEL_INT0);
+	Gpt_Init(GPT_CHANNEL_TIM0, &Gpt_Configuration[0]);
+	Gpt_Start(GPT_CHANNEL_TIM0, GPT_PRESCALER_8);
+	Gpt_EnableNotification(GPT_INT_SOURCE_TIM0_OVF);
+	Gpt_SetCallback(GPT_INT_SOURCE_TIM0_OVF, Handler_Tim0_OVF);
+	Pwm_Init(PWM_CHANNEL_OC1A, PWM_MODE_FAST_ICR);
+	Pwm_SetICR(5000);
+	Pwm_Start(PWM_CHANNEL_OC1A, PWM_PRESCALER_8);
+	Gie_Enable();
+	Lcd_DisplayString(" ---");
+	_delay_ms(1000);
+	while (1)
+	{
+		Pwm_SetTimeOn(PWM_CHANNEL_OC1A, i);
+		_delay_(10);
+		Lcd_ClearDisplay();
+		Lcd_DisplayString("T = ");
+		Lcd_DisplayNumber(T_total);
+		Lcd_SetCursorPosition(1,0);
+		Lcd_DisplayString("T_on = ");
+		Lcd_DisplayNumber(T_on);
+		_delay_ms(1000);
+		i += 500;
+		if (i > 5000) {
+			i = 0;
+		}
+	}
+	
+#if 0
+	u16 i;
 	Pwm_Init(PWM_CHANNEL_OC1A, PWM_MODE_FAST_ICR);
 	Pwm_SetICR(20000);
 	Pwm_Start(PWM_CHANNEL_OC1A, PWM_PRESCALER_8);
 	while (1)
 	{
-		for (i=1000; i<=2000; i+=50) {
+		for (i=500; i<=2500; i+=100) {
 			Pwm_SetTimeOn(PWM_CHANNEL_OC1A, i);
-			_delay_ms(50);
+			_delay_ms(500);
 		}
-		_delay_ms(500);
 	}
+#endif 
 
 #if 0
 	u8 i;

@@ -167,6 +167,19 @@ void Gpt_SetCounterValue(Gpt_ChannelType channel, u16 value) {
         break;
     }
 }
+u16 Gpt_GetCounterValue(Gpt_ChannelType channel) {
+    u16 ret_value = 0;
+    switch (channel)
+    {
+    case GPT_CHANNEL_TIM0:
+        ret_value = TCNT0;
+        break;
+    /** TODO: Complete all cases (TIM1, TIM2) */
+    default:
+        break;
+    }
+    return ret_value;
+}
 void Gpt_EnableNotification(Gpt_InterruptSourceType source) {
     switch (source)
     {

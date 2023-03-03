@@ -62,13 +62,14 @@ typedef struct
     Gpt_CompareOutModeType compareOutMode;
 } Gpt_ConfigType;
 
-extern Gpt_ConfigType Gpt_Configuration;
+extern Gpt_ConfigType Gpt_Configuration[3];
 
 void Gpt_Init(Gpt_ChannelType channel, const Gpt_ConfigType* config);
 void Gpt_SetCompareReg(Gpt_CompareRegType reg, u16 value);
 void Gpt_Start(Gpt_ChannelType channel, Gpt_PrescalerType prescaler);
 void Gpt_Stop(Gpt_ChannelType channel);
 void Gpt_SetCounterValue(Gpt_ChannelType channel, u16 value);
+u16 Gpt_GetCounterValue(Gpt_ChannelType channel);
 void Gpt_EnableNotification(Gpt_InterruptSourceType source);
 void Gpt_DisbleNotification(Gpt_InterruptSourceType source);
 void Gpt_SetCallback(Gpt_InterruptSourceType source, void (*funcPtr) (void));

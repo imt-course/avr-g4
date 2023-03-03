@@ -8,7 +8,17 @@
 
 #include "Gpt.h"
 
-Gpt_ConfigType Gpt_Configuration = {
-    GPT_MODE_CTC,
-    GPT_COMP_OUT_DISCONNECTED
+Gpt_ConfigType Gpt_Configuration[3] = {
+    {
+        GPT_MODE_NORMAL,
+        GPT_COMP_OUT_DISCONNECTED
+    },
+    {
+        GPT_MODE_NORMAL,
+        GPT_COMP_OUT_DISCONNECTED
+    },
+    {
+        GPT_MODE_NORMAL,
+        GPT_COMP_OUT_DISCONNECTED
+    }
 };
