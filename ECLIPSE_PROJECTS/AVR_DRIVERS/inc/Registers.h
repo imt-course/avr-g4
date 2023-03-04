@@ -95,4 +95,7 @@
 #define TCNT2		*((volatile u8*) 0x44)
 #define OCR2		*((volatile u8*) 0x43)
 
+/************* Watchdog Timer *************/
+#define WDTCR		*((volatile u8*) 0x41)
+
 #endif /* INC_REGISTERS_H_ */
