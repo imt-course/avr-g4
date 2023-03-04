@@ -21,12 +21,48 @@
 #include "Registers.h"
 #include "Gpt.h"
 #include "Pwm.h"
+#include "Icu.h"
 #include "Delay.h"
 
+#define ICU_HW
 volatile u16 T_total;
 volatile u16 T_on;
 volatile u8 overflow_counter = 0;
 
+#ifdef ICU_HW
+
+void Handler_Icu (u16 data) {
+	static u8 state = 1;
+	static u16 offset = 0;
+	switch (state)
+	{
+	case 1:
+		offset = data;
+		overflow_counter = 0;
+		Icu_SetTriggerEdge(ICU_EDGE_FALLING);
+		state = 2;
+		break;
+	case 2:
+		T_on = overflow_counter*0x100 + data - offset;
+		Icu_SetTriggerEdge(ICU_EDGE_RISING);
+		state = 3;
+		break;
+	case 3:
+		T_total = overflow_counter*0x100 + data - offset;
+		state = 1;
+		break;
+	default:
+		break;
+	}
+}
+
+void Handler_Tim1_OVF (void) {
+	overflow_counter++;
+}
+
+#endif
+
+#ifdef ICU_SW
 void Handler_Int0 (void) {
 	static u8 state = 1;
 	static u16 offset = 0;
@@ -56,7 +92,55 @@ void Handler_Tim0_OVF (void) {
 	overflow_counter++;
 }
 
+#endif
+
 int main (void) {
+
+#ifdef ICU_HW
+	u8 i = 0;
+
+	Lcd_Init(&Lcd_Configuration);
+
+	Dio_SetPinMode(ICU_PIN, DIO_MODE_INPUT_FLOATING);
+	
+	/* Timer 1 (ICU) */
+	Icu_SetTriggerEdge(ICU_EDGE_RISING);
+	Icu_SetCallback(Handler_Icu);
+	Icu_EnableNotification();
+	
+	/* Timer Initialize */
+	Gpt_Init(GPT_CHANNEL_TIM1, &Gpt_Configuration[1]);
+	Gpt_Start(GPT_CHANNEL_TIM1, GPT_PRESCALER_8);
+	Gpt_EnableNotification(GPT_INT_SOURCE_TIM1_OVF);
+	Gpt_SetCallback(GPT_INT_SOURCE_TIM1_OVF, Handler_Tim1_OVF);
+	
+	/* PWM Initialize */
+	Pwm_Init(PWM_CHANNEL_OC0, PWM_MODE_FAST);
+	Pwm_Start(PWM_CHANNEL_OC0, PWM_PRESCALER_8);
+
+	Gie_Enable();
+
+	Lcd_DisplayString(" ---");
+	_delay_ms(1000);
+
+	while (1)
+	{
+		Pwm_SetTimeOn(PWM_CHANNEL_OC0, i);
+		_delay_ms(20);
+		Lcd_ClearDisplay();
+		Lcd_DisplayString("T = ");
+		Lcd_DisplayNumber(T_total);
+		Lcd_SetCursorPosition(1,0);
+		Lcd_DisplayString("T_on = ");
+		Lcd_DisplayNumber(T_on);
+		_delay_ms(1000);
+		i += 50;
+	}
+#endif
+
+
+#ifdef ICU_SW
+
 	u16 i = 0;
 
 	Lcd_Init(&Lcd_Configuration);
@@ -64,7 +148,7 @@ int main (void) {
 	Dio_SetPinMode(EXTINT_PIN_INT0, DIO_MODE_INPUT_FLOATING);
 	
 	/* Ext Interrupt (ICU) */
-	ExtInt_SetTriggerEdge(EXTINT_INT_CHANNEL_INT0, EXTINT_TRIGGER_EDGW_RISING);
+	ExtInt_SetTriggerEdge(EXTINT_INT_CH	ANNEL_INT0, EXTINT_TRIGGER_EDGW_RISING);
 	ExtInt_SetCallback(EXTINT_INT_CHANNEL_INT0, Handler_Int0);
 	ExtInt_EnableNotification(EXTINT_INT_CHANNEL_INT0);
 	
@@ -104,7 +188,8 @@ int main (void) {
 			i = 0;
 		}
 	}
-	
+#endif
+
 #if 0
 	u16 i;
 	Pwm_Init(PWM_CHANNEL_OC1A, PWM_MODE_FAST_ICR);
