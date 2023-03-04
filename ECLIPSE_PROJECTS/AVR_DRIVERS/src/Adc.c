@@ -10,6 +10,13 @@
 #include "Interrupts.h"
 #include "Adc.h"
 
+void (*Adc_Callback) (u16 data) = NULL_PTR;
+
+ISR(VECTOR_ADC) {
+    if (NULL_PTR != Adc_Callback) {
+        Adc_Callback(ADCDATA & 0x3FF);
+    }
+}
 void Adc_Init(void) {
     /* ADC Enable */
     SET_BIT(ADCSRA, 7);
@@ -52,4 +59,16 @@ u16 Adc_GetResult(void) {
     SET_BIT(ADCSRA, 4);
     /* Return Result */
     return (ADCDATA & 0x3FF);
+}
+
+void Adc_EnableNotification(void) {
+    SET_BIT(ADCSRA, 3);
+}
+
+void Adc_DisableNotification(void) {
+    CLR_BIT(ADCSRA, 3);
+}
+
+void Adc_SetCallback(void (*funcPtr) (u16 data)) {
+    Adc_Callback = funcPtr;
 }
