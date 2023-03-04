@@ -22,9 +22,10 @@
 #include "Gpt.h"
 #include "Pwm.h"
 #include "Icu.h"
+#include "Wdt.h"
 #include "Delay.h"
 
-#define ICU_HW
+//#define ICU_HW
 volatile u16 T_total;
 volatile u16 T_on;
 volatile u8 overflow_counter = 0;
@@ -95,7 +96,18 @@ void Handler_Tim0_OVF (void) {
 #endif
 
 int main (void) {
-
+	Dio_SetPinMode(DIO_PORTA, DIO_PIN0, DIO_MODE_OUTPUT);
+	Dio_SetPinLevel(DIO_PORTA, DIO_PIN0, DIO_LEVEL_HIGH);
+	_delay_ms(1000);
+	Dio_SetPinLevel(DIO_PORTA, DIO_PIN0, DIO_LEVEL_LOW);
+	Wdt_Enable();
+	Wdt_Sleep(WDT_TIME_1000_MS);
+	while (1)
+	{
+		_delay_ms(800);
+		//Wdt_Sleep(WDT_TIME_1000_MS);
+	}
+	
 #ifdef ICU_HW
 	u8 i = 0;
 
