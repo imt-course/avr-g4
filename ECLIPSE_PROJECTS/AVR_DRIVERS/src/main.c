@@ -83,7 +83,7 @@ int main (void) {
 	while (1)
 	{
 		Pwm_SetTimeOn(PWM_CHANNEL_OC1A, i);
-		_delay_(10);
+		_delay_ms(10);
 		Lcd_ClearDisplay();
 		Lcd_DisplayString("T = ");
 		Lcd_DisplayNumber(T_total);
