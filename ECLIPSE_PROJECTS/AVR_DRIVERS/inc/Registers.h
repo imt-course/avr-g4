@@ -98,4 +98,12 @@
 /************* Watchdog Timer *************/
 #define WDTCR		*((volatile u8*) 0x41)
 
+/************* UART *************/
+#define UCSRA		*((volatile u8*) 0x2B)
+#define UCSRB		*((volatile u8*) 0x2A)
+#define UCSRC		*((volatile u8*) 0x40)
+#define UDR         *((volatile u8*) 0x2C)
+#define UBRRL		*((volatile u8*) 0x29)
+#define UBRRH		*((volatile u8*) 0x40)
+
 #endif /* INC_REGISTERS_H_ */
