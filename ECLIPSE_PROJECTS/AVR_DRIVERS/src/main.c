@@ -26,6 +26,7 @@
 #include "Uart.h"
 #include "Delay.h"
 
+#if 0
 //#define ICU_HW
 volatile u16 T_total;
 volatile u16 T_on;
@@ -98,6 +99,8 @@ void Handler_Tim0_OVF (void) {
 
 int main (void) {
 
+
+#if 0
 	u8 data;
 	Uart_Init();
 	while (1)
@@ -105,7 +108,7 @@ int main (void) {
 		data = Uart_Receive();
 		Uart_Transmit(data);
 	}
-	
+#endif
 
 
 
@@ -447,3 +450,4 @@ int main (void) {
 #endif
 
 }
+#endif

@@ -106,4 +106,9 @@
 #define UBRRL		*((volatile u8*) 0x29)
 #define UBRRH		*((volatile u8*) 0x40)
 
+/************* SPI *************/
+#define SPCR		*((volatile u8*) 0x2D)
+#define SPSR		*((volatile u8*) 0x2E)
+#define SPDR		*((volatile u8*) 0x2F)
+
 #endif /* INC_REGISTERS_H_ */
