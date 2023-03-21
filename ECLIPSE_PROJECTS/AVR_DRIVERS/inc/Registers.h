@@ -111,4 +111,11 @@
 #define SPSR		*((volatile u8*) 0x2E)
 #define SPDR		*((volatile u8*) 0x2F)
 
+/************* I2C *************/
+#define TWBR		*((volatile u8*) 0x2D)
+#define TWCR		*((volatile u8*) 0x2E)
+#define TWSR		*((volatile u8*) 0x2F)
+#define TWDR		*((volatile u8*) 0x2F)
+#define TWAR		*((volatile u8*) 0x2F)
+
 #endif /* INC_REGISTERS_H_ */
